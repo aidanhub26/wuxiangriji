@@ -69,6 +69,7 @@ export function useRecords(userId) {
   }, [userId])
 
   const updateRecord = useCallback((dateStr, field, value) => {
+    let nextEntry
     setRecords(prev => {
       const entry = prev[dateStr] || { ...EMPTY }
       let next
@@ -79,16 +80,20 @@ export function useRecords(userId) {
         g[field] = value
         next = { ...entry, gratitude: g }
       }
+      nextEntry = next
+      return { ...prev, [dateStr]: next }
+    })
+    if (nextEntry) {
       supabase.from('xiaoshanlu_records').upsert({
         user_id: userId,
         date: dateStr,
-        gratitude: next.gratitude,
-        giving: next.giving,
-        repentance: next.repentance,
+        gratitude: nextEntry.gratitude,
+        giving: nextEntry.giving,
+        repentance: nextEntry.repentance,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'user_id,date' })
-      return { ...prev, [dateStr]: next }
-    })
+        .then(({ error }) => { if (error) console.error('Save error:', error) })
+    }
   }, [userId])
 
   const getEntry = useCallback((dateStr) => {
