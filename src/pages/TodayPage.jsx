@@ -94,6 +94,8 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
     if (complete && !prevComplete.current && sameDate) {
       setShowBloom(true)
       const t = setTimeout(() => setShowBloom(false), 1900)
+      prevComplete.current = complete
+      prevActiveDate.current = activeDate
       return () => clearTimeout(t)
     }
     prevComplete.current = complete
