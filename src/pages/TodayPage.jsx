@@ -60,24 +60,18 @@ function RepentanceField({ value, onChange, readOnly }) {
 function BloomAnimation({ onDone }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(255,255,255,0.85)', animation: 'fadeOut 1.8s ease forwards' }}
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
       onClick={onDone}
     >
-      <div style={{ animation: 'bloomScale 1.8s ease forwards' }}>
-        <img src="/icon-512.png" alt="" style={{ width: 160, height: 160, borderRadius: 36 }} />
+      <div style={{ animation: 'bloomFade 1.8s ease forwards' }}>
+        <img src="/icon-512.png" alt="" style={{ width: 180, height: 180, borderRadius: 40 }} />
       </div>
       <style>{`
-        @keyframes fadeOut {
-          0%   { opacity: 1; }
-          60%  { opacity: 1; }
-          100% { opacity: 0; pointer-events: none; }
-        }
-        @keyframes bloomScale {
+        @keyframes bloomFade {
           0%   { transform: scale(0.3); opacity: 0; }
           40%  { transform: scale(1.15); opacity: 1; }
-          70%  { transform: scale(0.95); }
-          100% { transform: scale(1); }
+          70%  { transform: scale(0.95); opacity: 1; }
+          100% { transform: scale(1); opacity: 0; }
         }
       `}</style>
     </div>
@@ -128,40 +122,42 @@ export default function TodayPage({ records, getEntry, updateRecord, streak, sav
       )}
 
       {/* Header */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="flex items-center justify-between">
-          {/* Date nav */}
-          <div className="flex items-center gap-3">
+      <div className="px-6 pt-8 pb-4 flex flex-col items-center gap-2">
+        {/* Streak row */}
+        <div className="flex items-center gap-1.5 bg-[#FDF6E3] px-3 py-1.5 rounded-full">
+          <span className="text-base">🪷</span>
+          <span className="text-[#C49A3C] font-semibold text-sm">{streak} 天</span>
+        </div>
+
+        {/* Date nav row */}
+        <div className="flex items-center gap-3">
+          {activeDate !== yesterdayStr ? (
             <button
               onClick={() => setActiveDate(yesterdayStr)}
-              disabled={activeDate === yesterdayStr}
-              className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${activeDate === yesterdayStr ? 'text-[#DDD]' : 'text-[#888] hover:bg-[#F0EDE8]'}`}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 18 9 12 15 6"/>
               </svg>
             </button>
-            <div className="text-center">
-              <p className="text-base font-semibold text-[#1A1A1A]">{month}月{day}日 · 周{weekDay}</p>
-              <p className="text-xs text-[#999] mt-0.5">{isToday ? '今天' : '昨天'}</p>
-            </div>
+          ) : <div className="w-8" />}
+
+          <p className="text-base font-semibold text-[#1A1A1A] w-36 text-center">{month}月{day}日 · 周{weekDay}</p>
+
+          {!isToday ? (
             <button
               onClick={() => setActiveDate(todayStr)}
-              disabled={isToday}
-              className={`w-8 h-8 flex items-center justify-center rounded-full transition-all ${isToday ? 'text-[#DDD]' : 'text-[#888] hover:bg-[#F0EDE8]'}`}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
             </button>
-          </div>
-
-          {/* Streak */}
-          <div className="flex items-center gap-1.5 bg-[#FDF6E3] px-3 py-1.5 rounded-full">
-            <span className="text-base">🪷</span>
-            <span className="text-[#C49A3C] font-semibold text-sm">{streak} 天</span>
-          </div>
+          ) : <div className="w-8" />}
         </div>
+
+        {/* Today/Yesterday label row */}
+        <p className="text-sm text-[#999]">{isToday ? '今天' : '昨天'}</p>
       </div>
 
       {/* Completion badge */}
