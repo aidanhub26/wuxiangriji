@@ -162,6 +162,16 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
         ) : <div className="w-9" />}
       </div>
 
+      {/* Back to today */}
+      {!isToday && (
+        <button
+          onClick={() => setActiveDate(todayStr)}
+          className="mx-auto mb-1 text-sm text-[#2D6A4F] py-1 px-4"
+        >
+          回到今天
+        </button>
+      )}
+
       {/* Completion badge */}
       {complete && (
         <div className="mx-6 mb-2 flex items-center gap-2 bg-[#EBF4EF] rounded-xl px-4 py-2.5">
@@ -209,14 +219,6 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
           <p className="text-[13px] text-[#999] leading-relaxed">{DEFINITION}</p>
         </div>
 
-        {!isToday && (
-          <button
-            onClick={() => setActiveDate(todayStr)}
-            className="w-full py-3 rounded-xl text-sm text-[#2D6A4F] bg-[#EBF4EF] font-medium"
-          >
-            回到今天
-          </button>
-        )}
       </div>
     </div>
   )
