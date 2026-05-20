@@ -83,15 +83,17 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
   const readOnly = !isEditable(activeDate)
   const prevComplete = useRef(false)
   const prevActiveDate = useRef(activeDate)
+  const shownBloom = useRef(new Set())
 
   const todayStr = today()
   const yesterdayStr = yesterday()
   const isToday = activeDate === todayStr
 
-  // Only trigger bloom when user input causes completion (not date switching)
+  // Only trigger bloom the very first time an entry is completed (not on re-edits or date switching)
   useEffect(() => {
     const sameDate = prevActiveDate.current === activeDate
-    if (complete && !prevComplete.current && sameDate) {
+    if (complete && !prevComplete.current && sameDate && !shownBloom.current.has(activeDate)) {
+      shownBloom.current.add(activeDate)
       setShowBloom(true)
       const t = setTimeout(() => setShowBloom(false), 1900)
       prevComplete.current = complete
@@ -206,6 +208,15 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
         <div className="rounded-xl bg-[#F7F5F1] px-4 py-3">
           <p className="text-[13px] text-[#999] leading-relaxed">{DEFINITION}</p>
         </div>
+
+        {!isToday && (
+          <button
+            onClick={() => setActiveDate(todayStr)}
+            className="w-full py-3 rounded-xl text-sm text-[#2D6A4F] bg-[#EBF4EF] font-medium"
+          >
+            回到今天
+          </button>
+        )}
       </div>
     </div>
   )
