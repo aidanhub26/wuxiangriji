@@ -5,7 +5,6 @@ import { supabase } from './lib/supabase'
 import TodayPage from './pages/TodayPage'
 import HistoryPage from './pages/HistoryPage'
 import LoginPage from './pages/LoginPage'
-import LotusIcon from './components/LotusIcon'
 
 function NavItem({ icon, label, active, onClick }) {
   return (
@@ -57,10 +56,14 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-dvh">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-6 pt-4 pb-3 border-b border-[#F0EDE8]">
+      <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-[#F0EDE8]">
         <div className="flex items-center gap-2">
           <img src="/icon-512.png" alt="" className="w-7 h-7 rounded-lg" />
           <span className="text-base font-semibold text-[#1A1A1A] tracking-wide">小善录</span>
+        </div>
+        <div className="flex items-center gap-1.5 bg-[#FDF6E3] px-3 py-1.5 rounded-full">
+          <span className="text-base leading-none">🪷</span>
+          <span className="text-[#C49A3C] font-semibold text-sm">{streak} 天</span>
         </div>
         <button
           onClick={() => supabase.auth.signOut()}
@@ -73,7 +76,7 @@ export default function App() {
       {/* Page content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {tab === 'today'
-          ? <TodayPage records={records} getEntry={getEntry} updateRecord={updateRecord} streak={streak} saveStatus={saveStatus} />
+          ? <TodayPage getEntry={getEntry} updateRecord={updateRecord} saveStatus={saveStatus} />
           : <HistoryPage records={records} getEntry={getEntry} />
         }
       </div>
