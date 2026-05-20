@@ -91,7 +91,7 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
   // Only trigger bloom when user input causes completion (not date switching)
   useEffect(() => {
     const sameDate = prevActiveDate.current === activeDate
-    if (complete && !prevComplete.current && activeDate === todayStr && sameDate) {
+    if (complete && !prevComplete.current && sameDate) {
       setShowBloom(true)
       const t = setTimeout(() => setShowBloom(false), 1900)
       return () => clearTimeout(t)
