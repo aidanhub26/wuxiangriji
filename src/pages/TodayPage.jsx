@@ -64,8 +64,6 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
   const entry = getEntry(activeDate)
   const complete = isComplete(entry)
   const readOnly = !isEditable(activeDate)
-  const prevComplete = useRef(false)
-  const prevActiveDate = useRef(activeDate)
   const shownBloom = useRef(new Set())
 
   const todayStr = today()
@@ -85,20 +83,12 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
     setActiveDate(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)
   }
 
-  // Only trigger bloom the very first time an entry is completed (not on re-edits or date switching)
-  useEffect(() => {
-    const sameDate = prevActiveDate.current === activeDate
-    if (complete && !prevComplete.current && sameDate && !shownBloom.current.has(activeDate)) {
-      shownBloom.current.add(activeDate)
-      setShowBloom(true)
-      const t = setTimeout(() => setShowBloom(false), 1900)
-      prevComplete.current = complete
-      prevActiveDate.current = activeDate
-      return () => clearTimeout(t)
-    }
-    prevComplete.current = complete
-    prevActiveDate.current = activeDate
-  }, [complete, activeDate, todayStr])
+  function handleConfirm() {
+    if (!complete || shownBloom.current.has(activeDate)) return
+    shownBloom.current.add(activeDate)
+    setShowBloom(true)
+    setTimeout(() => setShowBloom(false), 1900)
+  }
 
   function handleGratitude(index, val) { updateRecord(activeDate, index, val) }
   function handleGiving(val) { updateRecord(activeDate, 'giving', val) }
@@ -204,6 +194,16 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
             readOnly={readOnly}
           />
         </div>
+
+        {complete && !readOnly && !shownBloom.current.has(activeDate) && (
+          <button
+            onClick={handleConfirm}
+            className="w-full py-3.5 rounded-xl text-white font-medium text-[15px] transition-all"
+            style={{ backgroundColor: '#2D6A4F' }}
+          >
+            ✓ 完成
+          </button>
+        )}
 
 <div className="px-1 py-2">
           <p className="text-[13px] text-[#BDBDBD] leading-relaxed">{DEFINITION}</p>
