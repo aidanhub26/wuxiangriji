@@ -121,18 +121,19 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
       )}
 
       {/* Date nav */}
-      <div className="relative px-4 pt-6 pb-2 flex items-center justify-between">
+      <div className="relative pt-6 pb-2 flex items-center justify-center">
+        {/* Left arrow - absolute left edge */}
         <button
           onClick={prevDay}
-          className="w-9 h-9 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
+          className="absolute left-4 w-9 h-9 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"/>
           </svg>
         </button>
 
-        {/* Center label */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-baseline gap-1.5 whitespace-nowrap">
+        {/* Center label - truly centered */}
+        <div className="flex items-baseline gap-1.5 whitespace-nowrap">
           <span className="text-base font-semibold text-[#1A1A1A]">
             {isToday ? '今天' : isYesterday ? '昨天' : `${month}月${day}日`}
           </span>
@@ -144,16 +145,17 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
           )}
         </div>
 
+        {/* Right arrow - absolute right edge */}
         {!isToday ? (
           <button
             onClick={nextDay}
-            className="w-9 h-9 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
+            className="absolute right-4 w-9 h-9 flex items-center justify-center rounded-full text-[#888] hover:bg-[#F0EDE8] transition-all"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
-        ) : <div className="w-9" />}
+        ) : null}
       </div>
 
       {/* Back to today */}
