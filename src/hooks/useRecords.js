@@ -41,7 +41,7 @@ export function calcStreak(records) {
   return streak
 }
 
-const EMPTY = { gratitude: ['', '', ''], giving: '', repentance: '' }
+const EMPTY = { gratitude: ['', '', ''], giving: '' }
 
 export function useRecords(userId) {
   const [records, setRecords] = useState({})
@@ -56,13 +56,13 @@ export function useRecords(userId) {
     setLoading(true)
     supabase
       .from('xiaoshanlu_records')
-      .select('date, gratitude, giving, repentance')
+      .select('date, gratitude, giving')
       .eq('user_id', userId)
       .then(({ data, error }) => {
         if (error) { console.error('Load error:', error); setLoading(false); return }
         const map = {}
         for (const row of data || []) {
-          map[row.date] = { gratitude: row.gratitude, giving: row.giving, repentance: row.repentance || '' }
+          map[row.date] = { gratitude: row.gratitude, giving: row.giving }
         }
         setRecords(map)
         setLoading(false)
@@ -78,7 +78,6 @@ export function useRecords(userId) {
       date: dateStr,
       gratitude: entry.gratitude,
       giving: entry.giving,
-      repentance: entry.repentance,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id,date' })
       .then(({ error }) => {
