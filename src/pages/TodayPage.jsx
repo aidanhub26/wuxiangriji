@@ -165,10 +165,9 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
         </button>
       )}
 
-      {/* Completion badge */}
-      {complete && (
+      {/* Completion badge — only after user confirms */}
+      {confirmed && (
         <div className="mx-6 mb-2 flex items-center gap-2 bg-[#EBF4EF] rounded-xl px-4 py-2.5">
-          <span className="text-[#2D6A4F] text-sm">✓</span>
           <span className="text-[#2D6A4F] text-sm font-medium">{isToday ? '今日已完成' : isYesterday ? '昨日已完成' : '当日已完成'}</span>
         </div>
       )}
@@ -208,7 +207,7 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
               color: confirmed ? '#fff' : '#2D6A4F',
             }}
           >
-            ✓ 今日已完成
+            {confirmed ? '今日已完成 ✓' : '今日已完成？'}
           </button>
         )}
 
