@@ -13,7 +13,7 @@ function GratitudeField({ index, value, onChange, readOnly }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         readOnly={readOnly}
-        placeholder={`感恩事项 ${index + 1}`}
+        placeholder=""
         rows={2}
         className={`flex-1 bg-[#F7F5F1] rounded-xl px-4 py-3 text-[15px] text-[#1A1A1A] placeholder-[#BDBDBD] leading-relaxed ${readOnly ? 'opacity-60 cursor-default' : ''}`}
       />
@@ -31,7 +31,7 @@ function GivingField({ value, onChange, readOnly }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         readOnly={readOnly}
-        placeholder="今日一件布施"
+        placeholder=""
         rows={2}
         className={`flex-1 bg-[#F7F5F1] rounded-xl px-4 py-3 text-[15px] text-[#1A1A1A] placeholder-[#BDBDBD] leading-relaxed ${readOnly ? 'opacity-60 cursor-default' : ''}`}
       />
