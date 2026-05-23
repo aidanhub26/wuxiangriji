@@ -61,10 +61,11 @@ function BloomAnimation() {
 export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
   const [activeDate, setActiveDate] = useState(today())
   const [showBloom, setShowBloom] = useState(false)
+  const [confirmedDates, setConfirmedDates] = useState(new Set())
   const entry = getEntry(activeDate)
   const complete = isComplete(entry)
   const readOnly = !isEditable(activeDate)
-  const shownBloom = useRef(new Set())
+  const confirmed = confirmedDates.has(activeDate)
 
   const todayStr = today()
   const yesterdayStr = yesterday()
@@ -84,10 +85,13 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
   }
 
   function handleConfirm() {
-    if (!complete || shownBloom.current.has(activeDate)) return
-    shownBloom.current.add(activeDate)
-    setShowBloom(true)
-    setTimeout(() => setShowBloom(false), 1900)
+    if (!complete || confirmed) return
+    setConfirmedDates(prev => new Set([...prev, activeDate]))
+    // Bloom appears 500ms after tap
+    setTimeout(() => {
+      setShowBloom(true)
+      setTimeout(() => setShowBloom(false), 1900)
+    }, 500)
   }
 
   function handleGratitude(index, val) { updateRecord(activeDate, index, val) }
@@ -195,13 +199,16 @@ export default function TodayPage({ getEntry, updateRecord, saveStatus }) {
           />
         </div>
 
-        {complete && !readOnly && !shownBloom.current.has(activeDate) && (
+        {complete && !readOnly && (
           <button
             onClick={handleConfirm}
-            className="w-full py-3.5 rounded-xl text-white font-medium text-[15px] transition-all"
-            style={{ backgroundColor: '#2D6A4F' }}
+            className="w-full py-3.5 rounded-xl font-medium text-[15px] transition-all duration-300"
+            style={{
+              backgroundColor: confirmed ? '#2D6A4F' : '#EBF4EF',
+              color: confirmed ? '#fff' : '#2D6A4F',
+            }}
           >
-            ✓ 完成
+            ✓ 今日已完成
           </button>
         )}
 

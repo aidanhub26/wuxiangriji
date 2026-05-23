@@ -132,7 +132,7 @@ export function useRecords(userId) {
       debounceTimers.current[dateStr] = setTimeout(() => {
         saveToSupabase(dateStr, nextEntry)
         delete pendingEntries.current[dateStr]
-      }, 800)
+      }, 300)
     }
   }, [userId, saveToSupabase])
 
